@@ -5,7 +5,7 @@ import {
 } from "expo-camera";
 import React, { useRef } from "react";
 import { Button, StyleSheet, Text, View } from "react-native";
-import { recognizeTextFromImage } from "./utils/ocr"; // ✅ correcta para tu estructura
+import { recognizeTextFromImage } from "../utils/ocr"; // ✅ correcta para tu estructura
 
 export default function CameraScreen() {
   const [permission, requestPermission] = useCameraPermissions();
