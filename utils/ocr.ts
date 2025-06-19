@@ -1,31 +1,18 @@
-import axios from "axios";
-import * as FileSystem from "expo-file-system";
+import { recognize } from "react-native-tesseract-ocr";
+
+const tessOptions = {
+  whitelist: null, // caracteres permitidos, ej. '0123456789+-*/='
+  blacklist: null, // caracteres prohibidos
+};
 
 export async function recognizeTextFromImage(uri: string): Promise<string> {
   try {
-    const base64 = await FileSystem.readAsStringAsync(uri, {
-      encoding: FileSystem.EncodingType.Base64,
-    });
-
-    const response = await axios.post(
-      "https://api.ocr.space/parse/image",
-      {
-        base64Image: `data:image/jpg;base64,${base64}`,
-        language: "eng",
-        isOverlayRequired: false,
-      },
-      {
-        headers: {
-          apikey: "helloworld", // clave gratuita de prueba
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-      }
-    );
-
-    const parsedText = response.data?.ParsedResults?.[0]?.ParsedText || "";
-    return parsedText;
+    console.log("🧠 Procesando imagen con OCR:", uri);
+    const text = await recognize(uri, "ENG", tessOptions);
+    console.log("🧠 Texto reconocido:", text);
+    return text;
   } catch (error) {
-    console.error("Error OCR:", error);
+    console.error("🛑 Error OCR:", error);
     return "";
   }
 }
